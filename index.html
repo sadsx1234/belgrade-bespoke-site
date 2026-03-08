@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belgrade Bespoke Logistics | Tailored Transport & Long-Term Rentals</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React and ReactDOM CDNs -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes slideInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-float { animation: float 5s ease-in-out infinite; }
+        .animate-up { animation: slideInUp 0.8s ease-out forwards; }
+        
+        body { scroll-behavior: smooth; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+
+        .light-glow {
+            background: radial-gradient(circle at top right, rgba(59, 130, 246, 0.03), transparent);
+        }
+    </style>
+</head>
+<body class="bg-white font-sans text-slate-900 overflow-x-hidden text-left">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        
+        // Lucide Icon Component
+        const Icon = ({ name, className }) => {
+            const iconRef = useRef(null);
+            useEffect(() => {
+                if (iconRef.current && window.lucide) {
+                    const kebabName = name.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+                    const iconElement = document.createElement('i');
+                    iconElement.setAttribute('data-lucide', kebabName);
+                    if (className) iconElement.setAttribute('class', className);
+                    iconRef.current.innerHTML = '';
+                    iconRef.current.appendChild(iconElement);
+                    window.lucide.createIcons({ root: iconRef.current });
+                }
+            }, [name, className]);
+            return <span ref={iconRef} className="inline-flex items-center justify-center"></span>;
+        };
+
+        const App = () => {
+            const [activeSegment, setActiveSegment] = useState('longterm'); 
+            const [scrolled, setScrolled] = useState(false);
+            const [showCookies, setShowCookies] = useState(false);
+
+            // Contact Data & CTA
+            const contactMsg = "Individual conditions for each client";
+            const encodedMsg = encodeURIComponent(contactMsg);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 30);
+                window.addEventListener('scroll', handleScroll);
+                
+                // Check cookie acceptance
+                const accepted = localStorage.getItem('cookies-accepted');
+                if (!accepted) {
+                    setTimeout(() => setShowCookies(true), 1500);
+                }
+
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const acceptCookies = () => {
+                localStorage.setItem('cookies-accepted', 'true');
+                setShowCookies(false);
+            };
+
+            const content = {
+                longterm: {
+                    mainHeader: "Tailored Transport",
+                    subHeader: "Solution & Long-Term Rentals",
+                    title: "Strategic Long-Term Mobility",
+                    subtitle: "Full Support for 10 - 90+ Day Missions",
+                    image: "/VW_T6_Multivan_Generation_Six_2.0_TDI.JPG",
+                    badge: "Best for Delegations",
+                    hero3: [
+                        "Personalized chauffeur and vehicle assigned to your team for the entire duration of your stay (up to 3+ months).",
+                        "Guaranteed cost efficiency with substantial B2B discounts for contracts exceeding 10 days.",
+                        "Registered Commercial Organization: we provide full legal contracts and transparent invoicing for corporate accountability."
+                    ],
+                    pains: [
+                        { pain: "Unpredictable Costs", solution: "Fixed monthly rates. No surge pricing regardless of event intensity." },
+                        { pain: "Staff Rotation", solution: "Full management of cleaning and technical service without schedule interruptions." },
+                        { pain: "Logistics Chaos", solution: "Stable operational rhythm for pavillion staff and management teams." }
+                    ],
+                    fleet: [
+                        { name: "Couch rent", img: "/5226594313402258727.jpg", desc: "The standard for groups of 15–20. Perfect for daily staff rotation." },
+                        { name: "Multivan", img: "/VW_T6_Multivan_Generation_Six_2.0_TDI.JPG", desc: "Best choice for small groups (up to 9 seats)." },
+                        { name: "Minibus", img: "/1.jpg", desc: "Executive business class for long-term rental with maximum comfort." },
+                       ]
+                },
+                vip: {
+                    mainHeader: "Bespoke VIP",
+                    subHeader: "Mobility & Protocol Excellence",
+                    title: "Elite VIP & Protocol Service",
+                    subtitle: "High-Status Logistics for C-Level Executives",
+                    image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?q=80&w=1000",
+                    badge: "Black Label Standard",
+                    hero3: [
+                        "Premium Black Label: Discretion-focused service with a luxury fleet including S-Class and VIP V-Class.",
+                        "Personnel trained in diplomatic etiquette, security requirements, and high-level business standards.",
+                        "Fast-track airport assistance and 24/7 logistical oversight for immediate itinerary updates."
+                    ],
+                    pains: [
+                        { pain: "Privacy Risks", solution: "Vetted chauffeurs with non-disclosure agreements and absolute discretion." },
+                        { pain: "Rigid Itineraries", solution: "Adaptive real-time routing ensuring punctual arrival for high-stakes meetings." },
+                        { pain: "Status Requirements", solution: "Immaculate premium vehicles that mirror the prestige of your mission." }
+                    ],
+                    fleet: [
+                         { name: "Mercedes-Benz S-Class", img: "/benzo.jpg", desc: "The absolute leader for VIP meetings at Nikola Tesla Airport." },
+                        { name: "Mercedes-Benz V-Class VIP", img: "/MERCEDES_V_KLASA_THUMB.jpg", desc: "VIP Lounge setup. Most requested for ministerial delegations." },
+                        { name: "Audi A8 / A6", img: "/12161_large.jpg", desc: "Highly respected in Belgrade's business and legal circles." },
+                        ]
+                },
+                spot: {
+                    mainHeader: "Agile Spot",
+                    subHeader: "Transfers & City Runs",
+                    title: "Agile On-Demand Transfers",
+                    subtitle: "Flexible Mobility for City & Airport Runs",
+                    image: "https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?q=80&w=1000",
+                    badge: "24/7 Availability",
+                    hero3: [
+                        "Point-to-point transfers with fixed, transparent pricing. No dynamic multipliers or hidden fees.",
+                        "Instant response capability for business meetings or exhibition site visits in Belgrade.",
+                        "Professional standard for every ride: English-speaking drivers and immaculate business-class vehicles."
+                    ],
+                    pains: [
+                        { pain: "Queue Waiting", solution: "Bypass public apps. Professional dispatch ensures a car is ready when you are." },
+                        { pain: "Airport Navigation", solution: "Meet-and-greet service with name signs and luggage assistance as standard." },
+                        { pain: "Payment Barriers", solution: "Flexible corporate payments: business accounts, card in-car, or secure links." }
+                    ],
+                    fleet: [
+                         { name: "Skoda Superb", img: "/Škoda_Superb_III_01_China_2016-04-01.jpg", desc: "Serbian market leader. Perfect for Standard/Comfort class." },
+                        { name: "VW Golf / Polo", img: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?q=80&w=600", desc: "Familiar European classics, agile in Belgrade's urban traffic." },
+                        ]
+                }
+            };
+
+            const CorporateLogo = () => (
+                <div className="flex items-center gap-2 group">
+                    <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-100">
+                        <Icon name="ShieldCheck" className="w-6 h-6" />
+                    </div>
+                    <div className="flex flex-col text-left">
+                        <span className="font-black text-lg leading-none tracking-tight text-slate-900">BELGRADE</span>
+                        <span className="text-[10px] font-bold text-blue-600 tracking-widest uppercase">Bespoke Logistics</span>
+                    </div>
+                </div>
+            );
+
+            const ExpoLogo = () => (
+                <div className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
+                    <div className="relative w-8 h-8">
+                        <svg viewBox="0 0 100 100" className="w-full h-full">
+                            <path d="M35 25 C35 15, 15 15, 15 35 L15 65 C15 85, 35 85, 35 75 L35 25" fill="#E91E63" />
+                            <path d="M65 15 C75 15, 85 25, 85 45 L85 65 C85 85, 65 85, 65 75 L65 15" fill="#FFEB3B" />
+                            <path d="M15 65 C15 85, 35 95, 55 85 L55 65 C55 55, 35 55, 15 65" fill="#2196F3" />
+                            <path d="M55 45 C55 35, 75 35, 85 45 L85 65 C85 75, 65 85, 55 65 L55 45" fill="#8BC34A" />
+                        </svg>
+                    </div>
+                    <div className="text-[9px] font-black text-slate-400 leading-none text-left">
+                        SPECIALISED EXPO<br/>BELGRADE 2027
+                    </div>
+                </div>
+            );
+
+            return (
+                <div className="min-h-screen light-glow">
+                    {/* Header */}
+                    <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-6'}`}>
+                        <div className="container mx-auto px-6 flex justify-between items-center">
+                            <CorporateLogo />
+                            <div className="hidden lg:flex items-center gap-10">
+                                <div className="flex gap-8 text-xs font-bold uppercase tracking-widest text-slate-500">
+                                    <a href="#planning" className="hover:text-blue-600 transition-colors">Planning</a>
+                                    <a href="#fleet" className="hover:text-blue-600 transition-colors">Fleet</a>
+                                    <a href="#contact" className="hover:text-blue-600 transition-colors">Contacts</a>
+                                </div>
+                                <div className="h-8 w-px bg-slate-200"></div>
+                                <ExpoLogo />
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <a href={`https://wa.me/381616592171?text=${encodedMsg}`} className="bg-emerald-500 text-white p-2.5 rounded-full shadow-lg shadow-emerald-100 hover:bg-emerald-600 transition active:scale-95">
+                                    <Icon name="MessageCircle" className="w-5 h-5" />
+                                </a>
+                                <a 
+    href={`https://wa.me/381616592171?text=${encodedMsg}`} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="hidden sm:block bg-blue-600 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-blue-100 active:scale-95 transition text-center"
+>
+    Free Consultation
+</a>
+                            </div>
+                        </div>
+                    </nav>
+
+                    {/* Hero Section */}
+                    <section className="relative pt-20 pb-16 md:pt-28 md:pb-24 bg-slate-50 overflow-hidden text-left">
+                        <div className="container mx-auto px-6">
+                            <div className="flex flex-col lg:flex-row items-center gap-12">
+                                <div className="lg:w-3/5 text-left z-10">
+                                    <div className="inline-flex items-center gap-2 bg-white border border-blue-100 text-blue-700 px-4 py-1 rounded-full text-[10px] font-black tracking-widest uppercase mb-6 shadow-sm">
+                                        <Icon name="Globe" className="w-3.5 h-3.5" /> Commercial Partner for EXPO 2027
+                                    </div>
+                                    <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 leading-[1.05] mb-6 animate-up" key={`h1-${activeSegment}`}>
+                                        {content[activeSegment].mainHeader} <br /> 
+                                        <span className="text-blue-600 italic">{content[activeSegment].subHeader}</span>
+                                    </h1>
+                                    <p className="text-xl text-slate-500 mb-8 max-w-2xl leading-relaxed animate-up" style={{animationDelay: '0.2s'}} key={`p-${activeSegment}`}>
+                                        {activeSegment === 'longterm' 
+                                            ? "Integrated business logistics for international missions. We bridge the gap between complex travel needs and Belgrade's event infrastructure." 
+                                            : activeSegment === 'vip' 
+                                            ? "High-level protocol management and absolute discretion for diplomatic and C-level delegations in Serbia." 
+                                            : "Flexible on-demand mobility solutions. Reliable transfers and city-wide support for agile corporate teams."}
+                                    </p>
+                                    
+                                    <div className="flex flex-wrap gap-4 mb-8">
+                                        <div className="bg-white p-1 rounded-2xl flex flex-wrap shadow-sm border border-slate-200">
+                                            <button 
+                                                onClick={() => setActiveSegment('longterm')}
+                                                className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${activeSegment === 'longterm' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'text-slate-400 hover:text-slate-600'}`}
+                                            >
+                                                Long-Term
+                                            </button>
+                                            <button 
+                                                onClick={() => setActiveSegment('vip')}
+                                                className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${activeSegment === 'vip' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'text-slate-400 hover:text-slate-600'}`}
+                                            >
+                                                VIP Black Label
+                                            </button>
+                                            <button 
+                                                onClick={() => setActiveSegment('spot')}
+                                                className={`px-6 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all ${activeSegment === 'spot' ? 'bg-blue-600 text-white shadow-lg shadow-blue-100' : 'text-slate-400 hover:text-slate-600'}`}
+                                            >
+                                                Spot Transfers
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="lg:w-2/5 relative animate-fade" key={`img-${activeSegment}`}>
+                                    <div className="relative rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white animate-float bg-slate-100">
+                                        <img 
+                                            src={content[activeSegment].image} 
+                                            alt={content[activeSegment].title}
+                                            className="w-full aspect-[4/5] object-cover transition-opacity duration-500"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-slate-900/50 via-transparent to-transparent"></div>
+                                        <div className="absolute bottom-6 left-6">
+                                            <div className="bg-white/95 backdrop-blur-md p-3 rounded-2xl shadow-xl border border-white/20">
+                                                <div className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-0.5">{content[activeSegment].badge}</div>
+                                                <div className="text-[12px] font-bold text-slate-900 tracking-tight">Registered Commercial Organization</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-6 mt-16">
+                                {content[activeSegment].hero3.map((text, idx) => (
+                                    <div key={idx} className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group text-left animate-up" style={{animationDelay: `${idx * 0.1}s`}}>
+                                        <div className="text-blue-50 font-black text-5xl mb-4 group-hover:text-blue-100 transition-colors opacity-100 italic leading-none">0{idx + 1}</div>
+                                        <p className="text-slate-600 leading-relaxed font-semibold text-base">{text}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Planning Section */}
+                    <section className="py-20 bg-white" id="planning">
+                        <div className="container mx-auto px-6">
+                            <div className="flex flex-col lg:flex-row gap-16 items-center">
+                                <div className="lg:w-1/2 text-left">
+                                    <h2 className="text-4xl font-extrabold text-slate-900 mb-8 tracking-tight">Strategic Advisory: <br/><span className="text-blue-600 italic underline decoration-blue-100 underline-offset-8">Early-Stage Planning</span></h2>
+                                    <p className="text-slate-500 text-lg leading-relaxed mb-8">
+                                        Success at a global event starts months before the first visitor arrives. We assist our partners with complex logistics audits and local intelligence.
+                                    </p>
+                                    <div className="space-y-4">
+                                        {[
+                                            { icon: "Compass", title: "Logistics Audits", desc: "Pre-calculating travel times between city hubs and pavillions." },
+                                            { icon: "Map", title: "Route Optimization", desc: "Identifying VIP corridors and avoiding high-congestion zones." },
+                                            { icon: "Info", title: "Information Support", desc: "Real-time updates on infrastructure changes related to EXPO 2027." }
+                                        ].map((item, i) => (
+                                            <div key={i} className="flex gap-5 p-5 rounded-2xl bg-slate-50 hover:bg-white border border-transparent hover:border-blue-100 transition-all">
+                                                <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                                    <Icon name={item.icon} className="w-5 h-5" />
+                                                </div>
+                                                <div>
+                                                    <h4 className="font-bold text-base text-slate-900 mb-0.5">{item.title}</h4>
+                                                    <p className="text-slate-500 text-xs font-medium leading-relaxed">{item.desc}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className="lg:w-1/2 w-full">
+                                    <div className="bg-blue-600 p-10 md:p-14 rounded-[3.5rem] text-white shadow-2xl shadow-blue-100 relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
+                                        <Icon name="Zap" className="w-14 h-14 mb-6 opacity-40" />
+                                        <h3 className="text-3xl font-black mb-4 leading-tight">Need expert info <br/>on EXPO 2027?</h3>
+                                        <p className="text-blue-100 text-base mb-8 font-medium">Get a free consultation regarding local traffic forecasts and infrastructure updates.</p>
+                                        <a href="#contact" className="inline-block bg-white text-blue-600 px-8 py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-xl hover:scale-105 active:scale-95 transition-all">
+                                            Book Free Consultation
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Fleet Section */}
+                    <section className="py-20 bg-slate-50" id="fleet">
+                        <div className="container mx-auto px-6">
+                            <div className="flex flex-col lg:flex-row justify-between items-end mb-16 gap-6">
+                                <div className="text-left max-w-2xl">
+                                    <h2 className="text-4xl font-black text-slate-900 mb-4 uppercase italic tracking-tighter underline decoration-blue-200 underline-offset-8">The Professional Fleet</h2>
+                                    <p className="text-slate-500 font-medium text-base leading-relaxed">Verified vehicles curated for the Serbian landscape and international business standards.</p>
+                                </div>
+                                <div className="bg-blue-600/5 text-blue-600 px-5 py-2 rounded-xl font-black text-xs uppercase tracking-[0.2em] border border-blue-600/10">
+                                    Tier: {activeSegment.toUpperCase()}
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" key={`f-${activeSegment}`}>
+                                {content[activeSegment].fleet.map((car, idx) => (
+                                    <div key={idx} className="bg-white rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-2xl transition-all animate-up overflow-hidden flex flex-col group" style={{animationDelay: `${idx * 0.1}s`}}>
+                                        <div className="w-full aspect-[16/10] overflow-hidden bg-slate-100 relative">
+                                            <img src={car.img} alt={car.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-black text-blue-600 uppercase tracking-widest shadow-sm">
+                                                Verified Class
+                                            </div>
+                                        </div>
+                                        <div className="p-8 text-left flex flex-col flex-1">
+                                            <h4 className="text-xl font-black text-slate-900 mb-3 tracking-tighter italic leading-none">{car.name}</h4>
+                                            <p className="text-slate-500 text-xs font-semibold leading-relaxed mb-8">{car.desc}</p>
+                                            <div className="mt-auto pt-4 border-t border-slate-50 flex items-center justify-between">
+                                                <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">Standard: EXPO 2027</span>
+                                                <Icon name="ChevronRight" className="text-blue-600 w-4 h-4" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Contact Section */}
+                    <section className="py-20 bg-white" id="contact">
+                        <div className="container mx-auto px-6">
+                            <div className="text-center mb-16">
+                                <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tight uppercase italic underline decoration-blue-100 underline-offset-8">Direct Communication Priority</h2>
+                                <p className="text-slate-500 text-lg mb-6 italic font-medium">Connect with us for a free logistics briefing or personalized mobility proposal.</p>
+                                <div className="inline-flex items-center gap-3 bg-blue-50 text-blue-600 px-6 py-2 rounded-xl font-black text-xs uppercase tracking-[0.25em] shadow-sm">
+                                    <Icon name="Zap" className="w-3.5 h-3.5" />
+                                    {contactMsg}
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                                <a href={`https://wa.me/381616592171?text=${encodedMsg}`} target="_blank" className="group bg-emerald-50 p-8 rounded-[3rem] border border-emerald-100 hover:bg-emerald-500 hover:scale-105 transition-all duration-300 flex flex-col items-center text-center">
+                                    <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-emerald-500 mb-6 shadow-sm group-hover:text-emerald-500 transition-colors">
+                                        <Icon name="MessageCircle" className="w-7 h-7" />
+                                    </div>
+                                    <h4 className="font-black text-emerald-900 group-hover:text-white mb-2 text-xl tracking-tighter italic">WhatsApp</h4>
+                                    <p className="text-emerald-700/60 group-hover:text-white/80 text-[10px] font-black uppercase tracking-widest">Priority Channel</p>
+                                </a>
+                               <a 
+    href="viber://pa?chatURI=&number=381616592171" 
+    target="_blank"
+    className="group bg-indigo-50 p-8 rounded-[3rem] border border-indigo-100 hover:bg-indigo-600 hover:scale-105 transition-all duration-300 flex flex-col items-center text-center"
+>
+    <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-indigo-500 mb-6 shadow-sm">
+        <Icon name="PhoneCall" className="w-7 h-7" />
+    </div>
+    <h4 className="font-black text-indigo-900 group-hover:text-white mb-2 text-xl tracking-tighter italic">Viber</h4>
+    <p className="text-indigo-700/60 group-hover:text-white/80 text-[10px] font-black uppercase tracking-widest">Regional Direct</p>
+</a>
+                               <a 
+    href="https://t.me/SADSx1" 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="group bg-sky-50 p-8 rounded-[3rem] border border-sky-100 hover:bg-sky-500 hover:scale-105 transition-all duration-300 flex flex-col items-center text-center"
+>
+    <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-sky-500 mb-6 shadow-sm">
+        <Icon name="Send" className="w-7 h-7" />
+    </div>
+    <h4 className="font-black text-sky-900 group-hover:text-white mb-2 text-xl tracking-tighter italic">Telegram</h4>
+    <p className="text-sky-700/60 group-hover:text-white/80 text-[10px] font-black uppercase tracking-widest">Instant Reach</p>
+</a>
+                                <a href={`mailto:bbbespokelogistics@gmail.com?subject=EXPO%20Logistics%20Inquiry&body=${encodedMsg}`} className="group bg-slate-50 p-8 rounded-[3rem] border border-slate-200 hover:bg-slate-900 hover:scale-105 transition-all duration-300 flex flex-col items-center text-center">
+                                    <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-slate-500 mb-6 shadow-sm">
+                                        <Icon name="Mail" className="w-7 h-7" />
+                                    </div>
+                                    <h4 className="font-black text-slate-900 group-hover:text-white mb-2 text-xl tracking-tighter italic">E-mail</h4>
+                                    <p className="text-slate-400 group-hover:text-white/80 text-[10px] font-black uppercase tracking-widest">Official Docs</p>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer className="py-16 bg-slate-50 border-t border-slate-100">
+                        <div className="container mx-auto px-6 text-left">
+                            <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-16 text-left">
+                                <div className="max-w-xs">
+                                    <CorporateLogo />
+                                    <p className="mt-6 text-slate-400 text-xs font-bold leading-relaxed uppercase tracking-widest text-left">
+                                        Professional mobility partner for Specialised EXPO Belgrade 2027. We deliver professional stability.
+                                    </p>
+                                </div>
+                                <div className="grid grid-cols-2 gap-12 sm:gap-20">
+                                    <div className="flex flex-col gap-4">
+                                        <div className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">Status</div>
+                                        <div className="text-slate-500 font-bold text-xs tracking-tight">Registered Commercial Entity</div>
+                                        <div className="text-slate-500 font-bold text-xs tracking-tight">Business Carrier</div>
+                                        <div className="text-slate-500 font-bold text-xs tracking-tight">VAT Compliant Partner</div>
+                                    </div>
+                                    <div className="flex flex-col gap-4">
+                                        <div className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">Navigation</div>
+                                        <a href="#" className="text-blue-600 font-bold text-xs hover:underline">Top</a>
+                                        <a href="#planning" className="text-blue-600 font-bold text-xs hover:underline">Advisory</a>
+                                        <a href="#fleet" className="text-blue-600 font-bold text-xs hover:underline">Fleet Hub</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6">
+                                <div className="text-[9px] font-black text-slate-400 uppercase tracking-[0.3em]">
+                                    © 2025 Belgrade Bespoke Logistics. All rights reserved. Registered Business Entity in Serbia.
+                                </div>
+                                <div className="flex gap-8 items-center">
+                                    <ExpoLogo />
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+
+                    {/* Cookie Consent Banner */}
+                    {showCookies && (
+                        <div className="fixed bottom-0 left-0 w-full z-[100] p-4 md:p-6 animate-up">
+                            <div className="container mx-auto max-w-4xl">
+                                <div className="bg-white/95 backdrop-blur-md shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.1)] border border-slate-200 rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+                                    <div className="flex items-center gap-5 text-left">
+                                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center shrink-0">
+                                            <Icon name="Cookie" className="w-6 h-6" />
+                                        </div>
+                                        <div>
+                                            <h4 className="text-slate-900 font-bold text-lg leading-tight">Cookie Settings</h4>
+                                            <p className="text-slate-500 text-sm font-medium mt-1">We use cookies to ensure you get the best experience on our website for EXPO 2027 logistics planning.</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3 shrink-0 w-full md:w-auto">
+                                        <button 
+                                            onClick={() => setShowCookies(false)}
+                                            className="flex-1 md:flex-none px-6 py-3 rounded-xl text-slate-500 font-bold text-sm hover:bg-slate-50 transition"
+                                        >
+                                            Decline
+                                        </button>
+                                        <button 
+                                            onClick={acceptCookies}
+                                            className="flex-1 md:flex-none px-8 py-3 rounded-xl bg-blue-600 text-white font-black text-sm uppercase tracking-widest shadow-lg shadow-blue-100 hover:bg-blue-700 active:scale-95 transition"
+                                        >
+                                            Accept
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
